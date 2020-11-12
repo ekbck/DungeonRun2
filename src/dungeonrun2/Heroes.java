@@ -1,6 +1,6 @@
 package dungeonrun2;
 
-public abstract class Heroes {
+public class Heroes extends Creatures {
     
     private int initiative;
     private int health;
