@@ -1,6 +1,6 @@
 package dungeonrun2;
 
-public class Knight extends HeroesAbstract {
+public class Knight extends Heroes {
 
     public Knight(int initiative, int health, int attack, int agility, String name) {
         super(initiative, health, attack, agility, name);
