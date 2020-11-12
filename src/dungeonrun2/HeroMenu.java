@@ -8,8 +8,9 @@ public class HeroMenu {
 
     static Scanner sc = new Scanner(System.in);
 
-    static ArrayList<HeroesAbstract> heroes = new ArrayList<>();
+    static ArrayList<Heroes> heroes = new ArrayList<>();
     static ArrayList<Monsters> monsters = new ArrayList<>();
+    static ArrayList<Integer> initiative = new ArrayList<>();
 
     public static void chooseHero() {
 
@@ -28,7 +29,7 @@ public class HeroMenu {
             boolean confirm = confirmHero();
             if (confirm == true) {
                 String name = name();
-                HeroesAbstract knight = new Knight(5, 9, 6, 4, name);
+                Heroes knight = new Knight(5, 9, 6, 4, name);
                 heroes.add(knight);
                 randomMonster();
             } else {
@@ -40,7 +41,7 @@ public class HeroMenu {
             boolean confirm = confirmHero();
             if (confirm == true) {
                 String name = name();
-                HeroesAbstract wizard = new Wizard(5, 9, 6, 4, name);
+                Heroes wizard = new Wizard(5, 9, 6, 4, name);
                 heroes.add(wizard);
                 randomMonster();
             } else {
@@ -51,7 +52,7 @@ public class HeroMenu {
             boolean confirm = confirmHero();
             if (confirm == true) {
                 String name = name();
-                HeroesAbstract thief = new Thief(5, 9, 6, 4, name);
+                Heroes thief = new Thief(5, 9, 6, 4, name);
                 heroes.add(thief);
                 randomMonster();
             } else {
@@ -64,7 +65,6 @@ public class HeroMenu {
         }
 
     }
-
 
     public static void loadCharacter() {
 
@@ -103,31 +103,31 @@ public class HeroMenu {
         String input = sc.nextLine();
         return input;
     }
-        
-         public static void randomMonster() {
+
+    public static void randomMonster() {
 
         Random random = new Random();
 
-        if (Math.random() * 100 < 20) {     //jättespindel 20, 
+        if (Math.random() * 100 < 100) {     //jättespindel 20, 
             System.out.println("-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----");
             System.out.println("Watch out, there's a Giantspider ahead!");
-            Monsters gs1 = new GiantSpider(7, 10, 1, 3, "Giant Spider");
+            Monsters gs1 = new GiantSpider(1, 2, 1, 3, "Giant Spider");
             monsters.add(gs1);
         }
 
-        if (Math.random() * 100 < 15) {  //skelett 15  
+        if (Math.random() * 100 < 100) {  //skelett 15  
             System.out.println("-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----");
             System.out.println("Watch out, there's a Skeleton ahead!");
             Monsters s1 = new Skeleton(4, 3, 2, 3, "Skeleton");
             monsters.add(s1);
         }
-        if (Math.random() * 100 < 10) {   //orc 10
+        if (Math.random() * 100 < 100) {   //orc 10
             System.out.println("-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----");
             System.out.println("Watch out, there's an Orc ahead!");
             Monsters o1 = new Orc(6, 4, 3, 4, "Orc");
             monsters.add(o1);
         }
-        if (Math.random() * 100 < 5) {     //troll 5
+        if (Math.random() * 100 < 100) {     //troll 5
             System.out.println("-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----");
             System.out.println("Watch out, there's a Troll ahead!");
             Monsters t1 = new Troll(2, 7, 4, 2, "Troll");
@@ -144,7 +144,7 @@ public class HeroMenu {
 
     public static void battle() {
 
-        for (HeroesAbstract hero : heroes) {
+        for (Heroes hero : heroes) {
 
             for (Monsters monster : monsters) {
 
@@ -166,7 +166,7 @@ public class HeroMenu {
 
                 System.out.println("\nThere is a " + monster.getName() + " in the room!");
 
-                int whoToStart = checkInitiative(heroInit, monsterInit);
+                int whoToStart = checkInitiative();
 
                 if (whoToStart == 1) {
                     while (flee != 1 && heroHP >= 1 && monsterHP >= 1) {
@@ -192,6 +192,8 @@ public class HeroMenu {
                                     if (mAttack == 1) {
                                         heroHP--;
                                     }
+                                } else if (flee == 1) {
+                                    chooseHero();
                                 }
                             }
                         }
@@ -215,6 +217,9 @@ public class HeroMenu {
                                 }
                             } else if (choice == 2) {
                                 flee = flee(heroAgility);
+                                if (flee == 1) {
+                                    chooseHero();
+                                }
                             }
                         }
                     }
@@ -227,37 +232,26 @@ public class HeroMenu {
                 }
             }
         }
+
     }
 
-    public static int checkInitiative(int hero, int monster) {
+    public static int checkInitiative() {
 
-        int heroInitSum = rollDice(hero);
-        int monsterInitSum = rollDice(monster);
+        int monsterInitSum = 0;
+        int heroInitSum = 0;
 
-        System.out.println("\nYour initiative is: " + heroInitSum);
-        System.out.println("The monster's initiative is: " + monsterInitSum);
-
-        if (heroInitSum > monsterInitSum) {
-            System.out.println("You start");
-            return 1;
-        } else {
-            System.out.println("The monster starts attacking you");
-            return 0;
+        for (Heroes hero : heroes) {
+            heroInitSum = rollDice(hero.getAgility());
+            System.out.println("\n" + hero.getName()+ "'s initiative is: " + heroInitSum);
         }
 
-    }
+        for (Monsters monste : monsters) {
+            monsterInitSum = rollDice(monste.getInitiative());
+            System.out.println("The " + monste.getName() + " initiative is: " + monsterInitSum);
 
-    public static int checkInitiative(int hero, int monster1, int monster2) {
+        }
 
-        int heroInitSum = rollDice(hero);
-        int monster1InitSum = rollDice(monster1);
-        int monster2InitSum = rollDice(monster2);
-
-        System.out.println("\nYour initiative is: " + heroInitSum);
-        System.out.println("The first monster's initiative is: " + monster1InitSum);
-        System.out.println("The second monster's initiative is: " + monster2InitSum);
-
-        if (heroInitSum > monster1InitSum) {
+        if (heroInitSum > monsterInitSum) { // Jämför bara gentemot senaste monster initsum
             System.out.println("You start");
             return 1;
         } else {
