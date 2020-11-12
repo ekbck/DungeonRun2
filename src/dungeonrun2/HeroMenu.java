@@ -1,8 +1,13 @@
 package dungeonrun2;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Random;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
 public class HeroMenu {
 
@@ -11,6 +16,7 @@ public class HeroMenu {
     static ArrayList<Heroes> heroes = new ArrayList<>();
     static ArrayList<Monsters> monsters = new ArrayList<>();
     static ArrayList<Integer> initiative = new ArrayList<>();
+    static ArrayList<Creatures> creatures = new ArrayList<>();
 
     public static void chooseHero() {
 
@@ -31,6 +37,7 @@ public class HeroMenu {
                 String name = name();
                 Heroes knight = new Knight(5, 9, 6, 4, name);
                 heroes.add(knight);
+                creatures.add(knight);
                 randomMonster();
             } else {
                 chooseHero();
@@ -43,6 +50,7 @@ public class HeroMenu {
                 String name = name();
                 Heroes wizard = new Wizard(5, 9, 6, 4, name);
                 heroes.add(wizard);
+                creatures.add(wizard);
                 randomMonster();
             } else {
                 chooseHero();
@@ -54,6 +62,7 @@ public class HeroMenu {
                 String name = name();
                 Heroes thief = new Thief(5, 9, 6, 4, name);
                 heroes.add(thief);
+                creatures.add(thief);
                 randomMonster();
             } else {
                 chooseHero();
@@ -111,27 +120,31 @@ public class HeroMenu {
         if (Math.random() * 100 < 100) {     //jättespindel 20, 
             System.out.println("-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----");
             System.out.println("Watch out, there's a Giantspider ahead!");
-            Monsters gs1 = new GiantSpider(1, 2, 1, 3, "Giant Spider");
-            monsters.add(gs1);
+            Monsters spider = new GiantSpider(1, 2, 1, 3, "Giant Spider");
+            monsters.add(spider);
+            creatures.add(spider);
         }
 
         if (Math.random() * 100 < 100) {  //skelett 15  
             System.out.println("-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----");
             System.out.println("Watch out, there's a Skeleton ahead!");
-            Monsters s1 = new Skeleton(4, 3, 2, 3, "Skeleton");
-            monsters.add(s1);
+            Monsters skeleton = new Skeleton(4, 3, 2, 3, "Skeleton");
+            monsters.add(skeleton);
+            creatures.add(skeleton);
         }
         if (Math.random() * 100 < 100) {   //orc 10
             System.out.println("-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----");
             System.out.println("Watch out, there's an Orc ahead!");
-            Monsters o1 = new Orc(6, 4, 3, 4, "Orc");
-            monsters.add(o1);
+            Monsters orc = new Orc(6, 4, 3, 4, "Orc");
+            monsters.add(orc);
+            creatures.add(orc);
         }
         if (Math.random() * 100 < 100) {     //troll 5
             System.out.println("-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----");
             System.out.println("Watch out, there's a Troll ahead!");
-            Monsters t1 = new Troll(2, 7, 4, 2, "Troll");
-            monsters.add(t1);
+            Monsters troll = new Troll(2, 7, 4, 2, "Troll");
+            monsters.add(troll);
+            creatures.add(troll);
         }
 
         if (monsters.size() > 0) {
@@ -143,6 +156,8 @@ public class HeroMenu {
     }
 
     public static void battle() {
+        
+        playMusic("battle.wav");
 
         for (Heroes hero : heroes) {
 
@@ -193,6 +208,7 @@ public class HeroMenu {
                                         heroHP--;
                                     }
                                 } else if (flee == 1) {
+                                    monsters.clear();
                                     chooseHero();
                                 }
                             }
@@ -218,6 +234,7 @@ public class HeroMenu {
                             } else if (choice == 2) {
                                 flee = flee(heroAgility);
                                 if (flee == 1) {
+                                    monsters.clear();
                                     chooseHero();
                                 }
                             }
@@ -344,5 +361,19 @@ public class HeroMenu {
             sum += resultOfDie; // Lägger ihop alla tärningsresultat
         }
         return sum;
+    }
+    
+    public static void playMusic(String filepath) {
+        
+        InputStream music;
+        try {
+            music = new FileInputStream(new File(filepath));
+            AudioStream audios = new AudioStream(music);
+            AudioPlayer.player.start(audios);
+        }
+        catch (Exception e) {
+            System.out.println("Error");
+        }
+        
     }
 }
