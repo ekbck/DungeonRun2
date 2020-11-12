@@ -1,6 +1,6 @@
 package dungeonrun2;
 
-public class Monsters {
+public class Monsters extends Creatures {
 
     private int initiative;
     private int health;
