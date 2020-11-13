@@ -38,7 +38,7 @@ public class EnumsRFun {
         if (HeroMenu.monsters.isEmpty()) {
             // print no monster, pick up bling bling stuff and continue to next room
              FightState state = FightState.monsters_empty; // will return no monsters
-        }
+        } // Kommentar för att commita
     }
     
 }
