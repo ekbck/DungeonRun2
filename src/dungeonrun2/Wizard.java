@@ -2,8 +2,8 @@ package dungeonrun2;
 
 public class Wizard extends Heroes{
 
-    public Wizard(int initiative, int health, int attack, int agility, String name) {
-        super(initiative, health, attack, agility, name);
+    public Wizard(int initiative, int attack, int health, int agility, String name, int type, int totalInitiative) {
+        super(initiative, attack, health, agility, name, type, totalInitiative);
     }
 
     public static void stats() {

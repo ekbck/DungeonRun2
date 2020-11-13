@@ -2,9 +2,10 @@ package dungeonrun2;
 
 public class Knight extends Heroes {
 
-    public Knight(int initiative, int health, int attack, int agility, String name) {
-        super(initiative, health, attack, agility, name);
+    public Knight(int initiative, int attack, int health, int agility, String name, int type, int totalInitiative) {
+        super(initiative, attack, health, agility, name, type, totalInitiative);
     }
+    
 
     public static void stats() {
 
